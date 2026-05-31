@@ -36,6 +36,9 @@
     <ClCompile Include="XmlComment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="XmlFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector.hpp">
@@ -53,13 +56,13 @@
     <ClInclude Include="XmlAttribute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="XmlText.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="XmlComment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="XmlDocument.h">
+    <ClInclude Include="XmlFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

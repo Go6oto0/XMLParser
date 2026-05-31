@@ -45,6 +45,11 @@ void XmlNode::addChild(const XmlObject* child) {
 	children.push_back(child->clone());
 }
 
+const Vector<XmlObject*>& XmlNode::getChildren() const
+{
+	return children;
+}
+
 void XmlNode::serialize(std::ostream& os, size_t indent) const {
 	printIndents(os, indent);
 	os << "<" << name;
@@ -61,6 +66,18 @@ void XmlNode::serialize(std::ostream& os, size_t indent) const {
 	os << "</" << name << ">";
 
 }
+XmlNode::XmlNode(const String& name) : name(name) {}
 XmlObject* XmlNode::clone() const {
 	return new XmlNode(*this);
+}
+const String& XmlNode::getId() const {
+	return id;
+}
+const String& XmlNode::getName() const {
+	return name;
+}
+
+void XmlNode::setName(const String& name)
+{
+	this->name = name;
 }

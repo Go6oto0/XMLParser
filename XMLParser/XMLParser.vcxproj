@@ -130,6 +130,7 @@
     <ClCompile Include="String.cpp" />
     <ClCompile Include="XmlAttribute.cpp" />
     <ClCompile Include="XmlComment.cpp" />
+    <ClCompile Include="XmlFile.cpp" />
     <ClCompile Include="XmlNode.cpp" />
     <ClCompile Include="XmlObject.cpp" />
     <ClCompile Include="XMLParser.cpp" />
@@ -140,7 +141,7 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="XmlAttribute.h" />
     <ClInclude Include="XmlComment.h" />
-    <ClInclude Include="XmlDocument.h" />
+    <ClInclude Include="XmlFile.h" />
     <ClInclude Include="XmlNode.h" />
     <ClInclude Include="XmlObject.h" />
     <ClInclude Include="XmlText.h" />

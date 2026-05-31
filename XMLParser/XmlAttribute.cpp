@@ -5,6 +5,10 @@ XmlAttribute::XmlAttribute(const String& name, const String& value) : name(name)
 {
 }
 
+XmlAttribute::XmlAttribute(String* name, String* value) : name(*name), value(*value)
+{
+}
+
 const String& XmlAttribute::getName() const
 {
     return name;

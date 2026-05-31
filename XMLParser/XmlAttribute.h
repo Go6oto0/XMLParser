@@ -7,6 +7,7 @@ private:
 public:
 	XmlAttribute();
 	XmlAttribute(const String& name, const String& value);
+	XmlAttribute(String* name, String* value);
 	const String& getName() const;
 	const String& getValue() const;
 };

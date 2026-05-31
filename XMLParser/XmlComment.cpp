@@ -13,3 +13,7 @@ XmlObject* XmlComment::clone() const
 {
     return new XmlComment(*this);
 }
+
+XmlComment::XmlComment(const String& str) : comment(str)
+{
+}

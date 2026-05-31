@@ -8,6 +8,7 @@ private:
 	String name;
 	Vector<XmlAttribute> attributes;
 	Vector<XmlObject*> children;
+	String id;
 private:
 	void copy(const XmlNode& other);
 	void free();
@@ -16,8 +17,13 @@ public:
 	XmlNode(const XmlNode& other);
 	XmlNode& operator=(const XmlNode& other);
 	~XmlNode();
+	const String& getId() const;
 	void addAttribute(const XmlAttribute& attribute);
 	void addChild(const XmlObject* child);
+	XmlNode(const String&);
+	const String& getName() const;
+	void setName(const String&);
+	const Vector<XmlObject*>& getChildren() const;
 	void serialize(std::ostream& os, size_t indent = 0) const override;
 	XmlObject* clone() const override;
 };
