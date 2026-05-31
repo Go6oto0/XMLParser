@@ -17,7 +17,7 @@ public:
 	String(String&& other);
 	String(const char* str);
 	String& operator=(const String& other);
-	String&& operator=(String&& other);
+	String& operator=(String&& other);
 	~String();
 
 	friend std::ostream& operator<<(std::ostream& os, const String& other);

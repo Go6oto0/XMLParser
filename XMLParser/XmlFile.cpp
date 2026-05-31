@@ -101,8 +101,14 @@ XmlComment* createComment(std::istream& is) {
         char cur;
         if (!is.get(cur))
             return new XmlComment(comment);
-        else if (cur == '>')
+        else if (cur == '-') {
+            char next = is.peek();
+            if (next == '-') {
+                is.get(cur);
+                is.get(cur);
             return new XmlComment(comment);
+            }
+        }
         comment.push_back(cur);
     }
 }
@@ -111,14 +117,15 @@ void setName(std::istream& is, XmlNode& child, char first) {
     name.push_back(first);
     while (true)
     {
-        char cur;
-        if (!is.get(cur))
-            return;
         char next = is.peek();
-        if (cur == ' ' || next == '>') {
+        if (next == ' ' || next == '>' || !is)
+        {
             child.setName(name);
             return;
         }
+        
+        char cur;
+        is.get(cur);
         name.push_back(cur);
     }
 }
@@ -128,7 +135,7 @@ String createAttribute(std::istream& is) {
         char cur;
         if (!is.get(cur))
             return attr;
-        if (cur == '=' || cur == ' ')
+        if (cur == '=')
             return attr;
         attr.push_back(cur);
     }
@@ -136,84 +143,75 @@ String createAttribute(std::istream& is) {
 String createValue(std::istream& is) {
    
     String value;
-    bool closingQuotes = false;
-    while (true)
-    {
-        char cur;
-        if (!is.get(cur))
-            return value;
-        char next = is.peek();
-        if (next != ' ')
-            break;
-    }
+    char quote;
+    if (!is.get(quote))
+        return value;
     while (true) {
         char cur;
         if (!is.get(cur))
             return value;
-        else if ((cur == '"' || cur == '\'') && closingQuotes)
+        else if (cur == quote)
             return value;
-        else if ((cur == '"' || cur == '\'') && closingQuotes == false)
-            closingQuotes = true;
-        else if (!closingQuotes)
-            value.push_back(cur);
-        else
-            return value;
+        value.push_back(cur);
     }
 }
 void addAttribute(std::istream& is, XmlNode& child) {
-    String attr;
-    String value;
-    while (true)
-    {
-        char cur;
-        if (!is.get(cur))
-            return;
-        else if (cur == ' ')
-        {
-            attr = createAttribute(is);
-            value = createValue(is);
-            child.addAttribute(XmlAttribute(attr, value));
-        }
-        else if (cur == '>')
-            return;
-    }
+    String attr = createAttribute(is);
+    String value = createValue(is);
+    child.addAttribute(XmlAttribute(attr, value));
+}
+void handleId(XmlNode& child) {
+    if
 }
 XmlNode* createNode(std::istream& is) {
     XmlNode* child = new XmlNode;
+    char cur;
+    if (!is.get(cur))
+        return child;
+    setName(is, *child, cur);
     while (true)
     {
-        char cur;
         if (!is.get(cur))
-            return;
-        else if (!child->getName())
-            setName(is, *child, cur);
-        else if (cur != '>')
-            addAttribute(is, *child);
-        else
             return child;
+        else if (cur == ' ')
+            addAttribute(is, *child);
+        else if (cur == '>') {
+            handleId(*child);
+            return child;
+        }
     }
 }
 XmlText* createText(std::istream& is, char first) {
     String text;
     text.push_back(first);
-    while (true)
-    {
+    while (is && is.peek() != '<') {
         char cur;
-        if (!is.get(cur))
-            return new XmlText(text);
-        char next = is.peek();
-        if (next == '<')
-            return new XmlText(text);
+        is.get(cur);
         text.push_back(cur);
     }
+    return new XmlText(text);
+}
+bool isWhitespaceOnly(const String& str)
+{
+    for (size_t i = 0; i < str.getLen(); i++)
+    {
+        char ch = str[i];
+
+        if (ch != ' ' && ch != '\n' && ch != '\t' && ch != '\r')
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 void buildTree(std::istream& is, XmlNode& curNode) {
+    std::cout << curNode.getName();
     while (true)
     {
         char cur;
         if (!is.get(cur))
             return;
-
         if (cur == '<') {
             char next = is.peek();
             if (next == '/') {
@@ -234,7 +232,13 @@ void buildTree(std::istream& is, XmlNode& curNode) {
             }
         }
         else {
-            curNode.addChild(createText(is, cur));
+            XmlText* text = createText(is, cur);
+            if (!isWhitespaceOnly(text->getText()))
+            {
+                curNode.addChild(text);
+            }
+            else
+                delete text;
         }
 
     }

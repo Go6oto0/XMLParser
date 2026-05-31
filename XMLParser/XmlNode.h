@@ -19,7 +19,8 @@ public:
 	~XmlNode();
 	const String& getId() const;
 	void addAttribute(const XmlAttribute& attribute);
-	void addChild(const XmlObject* child);
+	void addChild(XmlObject* child);
+	int getAttributeInd(const String& attr) const;
 	XmlNode(const String&);
 	const String& getName() const;
 	void setName(const String&);

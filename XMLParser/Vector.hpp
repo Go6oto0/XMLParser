@@ -54,6 +54,7 @@ public:
 	}
 
 	void push_back(const T& el) {
+
 		if (size >= capacity)
 		{
 			resize();

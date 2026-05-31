@@ -31,7 +31,9 @@ XmlNode& XmlNode::operator=(const XmlNode& other) {
 	}
 	return *this;
 }
-
+int XmlNode::getAttributeInd(const String& attr) const {
+	
+}
 XmlNode::~XmlNode()
 {
 	free();
@@ -41,8 +43,9 @@ void XmlNode::addAttribute(const XmlAttribute& attribute) {
 	attributes.push_back(attribute);
 }
 
-void XmlNode::addChild(const XmlObject* child) {
-	children.push_back(child->clone());
+void XmlNode::addChild(XmlObject* child) {
+
+	children.push_back(child);
 }
 
 const Vector<XmlObject*>& XmlNode::getChildren() const

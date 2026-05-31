@@ -15,11 +15,21 @@ void String::free() {
 	capacity = 0;
 }
 void String::resizeTo(size_t newCapacity) {
-	char* newStr = new char[newCapacity];
-	strcpy(newStr, str);
-	capacity = newCapacity;
-	delete[] str;
-	str = newStr;
+	if (newCapacity == 0)
+	{
+		delete[] str;
+		capacity = 2;
+		str = new char[capacity];
+		str[0] = 0;
+	}
+	else
+	{
+		char* newStr = new char[newCapacity];
+		strcpy(newStr, str);
+		capacity = newCapacity;
+		delete[] str;
+		str = newStr;
+	}
 }
 void String::moveFrom(String&& other) {
 	str = other.str;
@@ -32,9 +42,10 @@ void String::moveFrom(String&& other) {
 
 //dyn memory
 String::String() {
-	str = nullptr;
-	capacity = 0;
+	capacity = 1;
 	len = 0;
+	str = new char[capacity];
+	str[0] = '\0';
 }
 String::String(const String& other) {
 	copy(other);
@@ -76,13 +87,13 @@ String& String::operator=(const String& other) {
 	copy(other);
 	return *this;
 }
-String&& String::operator=(String&& other) {
+String& String::operator=(String&& other) {
 	if (this != &other)
 	{
 		free();
 		moveFrom(std::move(other));
 	}
-	return std::move(*this);
+	return *this;
 }
 String::~String() {
 	free();
