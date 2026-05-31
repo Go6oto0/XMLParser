@@ -32,7 +32,14 @@ XmlNode& XmlNode::operator=(const XmlNode& other) {
 	return *this;
 }
 int XmlNode::getAttributeInd(const String& attr) const {
-	
+	for (size_t i = 0; i < attributes.getSize(); i++)
+	{
+		if (attr == attributes[i].getName())
+		{
+			return i;
+		}
+	}
+	return -1;
 }
 XmlNode::~XmlNode()
 {
@@ -46,6 +53,16 @@ void XmlNode::addAttribute(const XmlAttribute& attribute) {
 void XmlNode::addChild(XmlObject* child) {
 
 	children.push_back(child);
+}
+
+const Vector<XmlAttribute>& XmlNode::getAttributes() const
+{
+	return attributes;
+}
+
+Vector<XmlAttribute>& XmlNode::getAttributes()
+{
+	return attributes;
 }
 
 const Vector<XmlObject*>& XmlNode::getChildren() const

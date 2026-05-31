@@ -128,6 +128,25 @@ std::ostream& operator<<(std::ostream& os, const String& str) {
 	os << str.str;
 	return os;
 }
+void String::append(String const& other) {
+	if (len + other.getLen() + 1 >= capacity) {
+		resizeTo(len + other.getLen() + 1);
+	}
+	strcpy(str + len, other.str);
+	len += other.getLen();
+}
+String& String::operator+=(String const& other) {
+	append(other);
+	return *this;
+}
+bool operator<(String const& lhs, String const& rhs) {
+	return strcmp(lhs.str, rhs.str) < 0;
+}
+String operator+(String const& lhs, String const& rhs) {
+	String result(lhs);
+	result += rhs;
+	return result;
+}
 
 void String::push_back(char c) {
 	if (len + 1 >= capacity)

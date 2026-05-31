@@ -22,5 +22,8 @@ public:
 	void deserialize(std::istream& is);
 	void serialize(std::ostream& os);
 	XmlNode* getById(String id);
+	XmlNode* createNode(std::istream& is);
+	void buildTree(std::istream& is, XmlNode& curNode);
+	void handleId(XmlNode& child);
 	const XmlNode* getById(String id) const;
 };

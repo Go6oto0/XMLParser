@@ -84,6 +84,32 @@ XmlFile::~XmlFile()
 {
     free();
 }
+String toString(size_t num)
+{
+    if (num == 0)
+        return "0";
+
+    String result;
+
+    while (num > 0)
+    {
+        char digit = (num % 10) + '0';
+        result.push_back(digit);
+        num /= 10;
+    }
+
+    // reverse
+    size_t len = result.getLen();
+    for (size_t i = 0; i < len / 2; i++)
+    {
+        char temp = result[i];
+        result[i] = result[len - 1 - i];
+        result[len - 1 - i] = temp;
+    }
+
+    return result;
+}
+
 void reachEndOfTag(std::istream& is) {
     while (true)
     {
@@ -160,10 +186,35 @@ void addAttribute(std::istream& is, XmlNode& child) {
     String value = createValue(is);
     child.addAttribute(XmlAttribute(attr, value));
 }
-void handleId(XmlNode& child) {
-    if
+void XmlFile::handleId(XmlNode& child) {
+    int ind = child.getAttributeInd("id");
+    if (ind == -1)
+    {
+        String newId = String("auto_") + toString(nextId++);
+        child.addAttribute(XmlAttribute("id", newId));
+        registry[newId] = &child;
+        return;
+    }
+    String id = child.getAttributes()[ind].getValue();
+
+    if (registry.find(id) == registry.end())
+    {
+        registry[id] = &child;
+        return;
+    }
+
+    size_t suffix = 1;
+    String newId;
+
+    do
+    {
+        newId = id + String("_") + toString(suffix++);
+    } while (registry.find(newId) != registry.end());
+
+    child.getAttributes()[ind].setValue(newId);
+    registry[newId] = &child;
 }
-XmlNode* createNode(std::istream& is) {
+XmlNode* XmlFile::createNode(std::istream& is) {
     XmlNode* child = new XmlNode;
     char cur;
     if (!is.get(cur))
@@ -205,7 +256,7 @@ bool isWhitespaceOnly(const String& str)
 
     return true;
 }
-void buildTree(std::istream& is, XmlNode& curNode) {
+void XmlFile::buildTree(std::istream& is, XmlNode& curNode) {
     std::cout << curNode.getName();
     while (true)
     {

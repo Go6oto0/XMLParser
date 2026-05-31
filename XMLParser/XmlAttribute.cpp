@@ -5,9 +5,11 @@ XmlAttribute::XmlAttribute(const String& name, const String& value) : name(name)
 {
 }
 
-XmlAttribute::XmlAttribute(String* name, String* value) : name(*name), value(*value)
+void XmlAttribute::setValue(const String& val)
 {
+    value = val;
 }
+
 
 const String& XmlAttribute::getName() const
 {

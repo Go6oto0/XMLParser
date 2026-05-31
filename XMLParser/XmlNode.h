@@ -20,6 +20,8 @@ public:
 	const String& getId() const;
 	void addAttribute(const XmlAttribute& attribute);
 	void addChild(XmlObject* child);
+	const Vector<XmlAttribute>& getAttributes() const;
+	Vector<XmlAttribute>& getAttributes();
 	int getAttributeInd(const String& attr) const;
 	XmlNode(const String&);
 	const String& getName() const;

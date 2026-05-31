@@ -22,6 +22,10 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& os, const String& other);
 	char& operator[](size_t ind);
+	void append(const String& other);
+	String& operator+=(const String& other);
+	friend bool operator<(String const& lhs, String const& rhs);
+	friend String operator+(const String& lhs, const String& rhs);
 	void clear();
 	const char& operator[](size_t index) const;
 	operator bool() const;
