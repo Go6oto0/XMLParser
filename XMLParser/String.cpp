@@ -1,6 +1,6 @@
 #pragma warning(disable:4996)
 #include "String.h"
-#include <ostream>
+#include <iostream>
 //helper
 void String::copy(const String& other) {
 	len = other.len;
@@ -71,9 +71,10 @@ String::String(const char* str) {
 }
 void String::clear() {
 	delete[] str;
-	str = nullptr;
+	capacity = 1;
 	len = 0;
-	capacity = 0;
+	str = new char[capacity];
+	str[0] = '\0';
 }
 String::operator bool() const {
 	return (len != 0);
@@ -146,6 +147,23 @@ String operator+(String const& lhs, String const& rhs) {
 	String result(lhs);
 	result += rhs;
 	return result;
+}
+const char* String::getPtr() const {
+	return str;
+}
+std::istream& operator>>(std::istream& is, String& str)
+{
+	str.clear();
+
+	while (std::isspace(is.peek()))
+		is.get();
+
+	while (is && !std::isspace(is.peek()))
+	{
+		str.push_back(is.get());
+	}
+
+	return is;
 }
 
 void String::push_back(char c) {

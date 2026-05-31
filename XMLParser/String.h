@@ -26,7 +26,9 @@ public:
 	String& operator+=(const String& other);
 	friend bool operator<(String const& lhs, String const& rhs);
 	friend String operator+(const String& lhs, const String& rhs);
+	friend std::istream& operator>>(std::istream& is, String& str);
 	void clear();
+	const char* getPtr() const;
 	const char& operator[](size_t index) const;
 	operator bool() const;
 	friend bool operator==(String const& lhs, String const& rhs);

@@ -1,6 +1,8 @@
 #include "XmlFile.h"
 #include "XmlComment.h"
 #include "XmlText.h"
+#include "String.h"
+#include <fstream>
 void XmlFile::rebuildRegistry(XmlNode* curNode) {
     if (curNode == nullptr)
     {
@@ -23,6 +25,7 @@ void XmlFile::copy(const XmlFile& other) {
     root = static_cast<XmlNode*>(other.root->clone());
     nextId = other.nextId;
     rebuildRegistry(other.root);
+    currentFileName = other.currentFileName;
 }
 
 void XmlFile::free()
@@ -31,6 +34,7 @@ void XmlFile::free()
     delete root;
     root = nullptr;
     nextId = 0;
+    currentFileName.clear();
 }
 
 void XmlFile::moveFrom(XmlFile&& other)
@@ -38,9 +42,11 @@ void XmlFile::moveFrom(XmlFile&& other)
     root = other.root;
     nextId = other.nextId;
     registry = std::move(other.registry);
+    currentFileName = std::move(other.currentFileName);
     other.root = nullptr;
     other.nextId = 0;
     other.registry.clear();
+    other.currentFileName.clear();
 }
 
 XmlFile::XmlFile()
@@ -84,7 +90,7 @@ XmlFile::~XmlFile()
 {
     free();
 }
-String toString(size_t num)
+String XmlFile::toString(size_t num)
 {
     if (num == 0)
         return "0";
@@ -110,7 +116,151 @@ String toString(size_t num)
     return result;
 }
 
-void reachEndOfTag(std::istream& is) {
+void XmlFile::select(const String& id, const String& key) const
+{
+    if (registry.count(id) == 0)
+    {
+        std::cout << "no such element";
+        return;
+    }
+    const XmlNode* node = registry.at(id);
+    int ind = node->getAttributeInd(key);
+    if (ind == -1)
+    {
+        std::cout << "no such attribute";
+        return;
+    }
+    std::cout << node->getAttributes()[ind].getValue() << std::endl;
+}
+
+void XmlFile::set(const String& id, const String& key, const String& value)
+{
+    if (registry.count(id) == 0)
+    {
+        std::cout << "no such element";
+        return;
+    }
+    XmlNode* node = registry.at(id);
+    int ind = node->getAttributeInd(key);
+    if (ind == -1)
+    {
+        std::cout << "no such attribute";
+        return;
+    }
+    node->getAttributes()[ind].setValue(value);
+}
+void XmlFile::children(const String& id) const
+{
+    if (registry.count(id) == 0)
+    {
+        std::cout << "no such element";
+        return;
+    }
+    const XmlNode* node = registry.at(id);
+    const Vector<XmlObject*>& children = node->getChildren();
+    size_t len = children.getSize();
+    for (size_t i = 0; i < len; i++)
+    {
+        const XmlNode* child = dynamic_cast<const XmlNode*>(children[i]);
+        if (!child)
+        {
+            continue;
+        }
+        int ind = child->getAttributeInd("id");
+        if (ind != -1)
+        {
+            std::cout << child->getAttributes()[ind].getValue() << std::endl;
+        }
+    }
+}
+void XmlFile::child(const String& id, size_t pos) const {
+    if (registry.count(id) == 0)
+    {
+        std::cout << "no such element";
+        return;
+    }
+    const XmlNode* node = registry.at(id);
+    const Vector<XmlObject*>& children = node->getChildren();
+    size_t len = children.getSize();
+    size_t current = 0;
+    for (size_t i = 0; i < len; i++)
+    {
+        const XmlNode* child = dynamic_cast<const XmlNode*>(children[i]);
+        if (!child)
+        {
+            continue;
+        }
+        if (current == pos)
+        {
+            int ind = child->getAttributeInd("id");
+            if (ind != -1)
+            {
+                std::cout << child->getAttributes()[ind].getValue() << std::endl;
+                return;
+            }
+        }
+        current++;
+    }
+    std::cout << "no such child" << std::endl;
+}
+void XmlFile::text(const String& id) const {
+    if (registry.count(id) == 0)
+    {
+        std::cout << "no such element";
+        return;
+    }
+    const XmlNode* node = registry.at(id);
+    const Vector<XmlObject*>& children = node->getChildren();
+    size_t len = children.getSize();
+    for (size_t i = 0; i < len; i++)
+    {
+        const XmlText* child = dynamic_cast<const XmlText*>(children[i]);
+        if (!child)
+        {
+            continue;
+        }
+        std::cout << child->getText() << std::endl;
+    }
+}
+void XmlFile::deleteAttr(const String& id, const String& key) {
+    if (registry.count(id) == 0)
+    {
+        std::cout << "no such element";
+        return;
+    }
+    XmlNode* node = registry.at(id);
+    int ind = node->getAttributeInd(key);
+    if (ind == -1)
+    {
+        std::cout << "no such attribute" << std::endl;
+        return;
+    }
+    Vector<XmlAttribute>& attributes = node->getAttributes();
+    attributes[ind] = attributes[attributes.getSize() - 1];
+    attributes.pop_back();
+}
+void XmlFile::newChild(const String& id) {
+    if (registry.count(id) == 0)
+    {
+        std::cout << "no such element";
+        return;
+    }
+    XmlNode* node = registry.at(id);
+    XmlNode* child = new XmlNode();
+    child->setName("newChild");
+    String newId = String("auto_") + toString(nextId);
+    nextId++;
+
+    while (registry.count(newId) != 0)
+    {
+        newId = String("auto_") + toString(nextId);
+        nextId++;
+    }
+    child->addAttribute(XmlAttribute("id", newId));
+    node->addChild(child);
+    registry[newId] = child;
+}
+void XmlFile::reachEndOfTag(std::istream& is) {
     while (true)
     {
         char cur;
@@ -120,7 +270,7 @@ void reachEndOfTag(std::istream& is) {
             return;
     }
 }
-XmlComment* createComment(std::istream& is) {
+XmlComment* XmlFile::createComment(std::istream& is) {
     String comment;
     while (true)
     {
@@ -138,7 +288,7 @@ XmlComment* createComment(std::istream& is) {
         comment.push_back(cur);
     }
 }
-void setName(std::istream& is, XmlNode& child, char first) {
+void XmlFile::setName(std::istream& is, XmlNode& child, char first) {
     String name;
     name.push_back(first);
     while (true)
@@ -155,7 +305,7 @@ void setName(std::istream& is, XmlNode& child, char first) {
         name.push_back(cur);
     }
 }
-String createAttribute(std::istream& is) {
+String XmlFile::createAttribute(std::istream& is) {
     String attr;
     while (true) {
         char cur;
@@ -166,7 +316,7 @@ String createAttribute(std::istream& is) {
         attr.push_back(cur);
     }
 }
-String createValue(std::istream& is) {
+String XmlFile::createValue(std::istream& is) {
    
     String value;
     char quote;
@@ -181,7 +331,7 @@ String createValue(std::istream& is) {
         value.push_back(cur);
     }
 }
-void addAttribute(std::istream& is, XmlNode& child) {
+void XmlFile::addAttribute(std::istream& is, XmlNode& child) {
     String attr = createAttribute(is);
     String value = createValue(is);
     child.addAttribute(XmlAttribute(attr, value));
@@ -232,7 +382,8 @@ XmlNode* XmlFile::createNode(std::istream& is) {
         }
     }
 }
-XmlText* createText(std::istream& is, char first) {
+
+XmlText* XmlFile::createText(std::istream& is, char first) {
     String text;
     text.push_back(first);
     while (is && is.peek() != '<') {
@@ -242,7 +393,7 @@ XmlText* createText(std::istream& is, char first) {
     }
     return new XmlText(text);
 }
-bool isWhitespaceOnly(const String& str)
+bool XmlFile::isWhitespaceOnly(const String& str)
 {
     for (size_t i = 0; i < str.getLen(); i++)
     {
@@ -300,7 +451,7 @@ void XmlFile::deserialize(std::istream& is)
     buildTree(is, *root);
 }
 
-void XmlFile::serialize(std::ostream& os)
+void XmlFile::serialize(std::ostream& os) const
 {
     if (root)
     {
@@ -315,4 +466,47 @@ XmlNode* XmlFile::getById(String id)
 
 const XmlNode* XmlFile::getById(String id) const {
     return registry.at(id);
+}
+
+void XmlFile::open(const String& fileName) {
+    std::ifstream ifs(fileName.getPtr());
+    if (!ifs.is_open())
+    {
+        std::cout << "couldn't open file" << std::endl;
+        return;
+    }
+    free();
+    currentFileName = fileName;
+    deserialize(ifs);
+}
+void XmlFile::close() {
+    free();
+}
+void XmlFile::save() const {
+    if (!currentFileName)
+    {
+        std::cout << "no file opened";
+        return;
+    }
+    std::ofstream ofs(currentFileName.getPtr());
+    if (!ofs.is_open())
+    {
+        std::cout << "couldnt save file";
+        return;
+    }
+    serialize(ofs);
+}
+void XmlFile::saveAs(const String& fileName) const {
+    if (!currentFileName)
+    {
+        std::cout << "no file opened";
+        return;
+    }
+    std::ofstream ofs(fileName.getPtr());
+    if (!ofs.is_open())
+    {
+        std::cout << "couldnt save file";
+        return;
+    }
+    serialize(ofs);
 }
