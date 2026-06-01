@@ -1,6 +1,6 @@
 ﻿#pragma once
+#include "../String/String.h"
 #include "XmlObject.h"
-#include "String.h"
 /**
  * @brief Представя XML коментар в XML дървото.
  *

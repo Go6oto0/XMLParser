@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "XmlObject.h"
 #include "XmlAttribute.h"
-#include "Vector.hpp"
-#include "String.h"
+#include "../Containers/Vector.hpp"
+#include "../String/String.h"
 /**
  * @brief Представя XML елемент в XML дървото.
  *

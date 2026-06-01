@@ -1,5 +1,5 @@
 ﻿#include "XmlComment.h"
-
+#include "XmlFile.h"
 const String& XmlComment::getComment() const {
     return comment;
 }

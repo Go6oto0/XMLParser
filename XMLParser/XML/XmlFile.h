@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "XmlNode.h"
-#include "String.h"
-#include "Vector.hpp"
+#include "../String/String.h"
+#include "../Containers/Vector.hpp"
 #include "XmlComment.h"
 #include "XmlText.h"
 #include <map>

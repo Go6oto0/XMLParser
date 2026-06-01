@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "XmlFile.h"
+#include "../XML/XmlFile.h"
 /**
  * @brief Обработва потребителски команди за работа с XML документ.
  *

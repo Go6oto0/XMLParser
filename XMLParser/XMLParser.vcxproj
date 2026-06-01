@@ -127,29 +127,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CommandListener.cpp" />
-    <ClCompile Include="String.cpp" />
-    <ClCompile Include="XmlAttribute.cpp" />
-    <ClCompile Include="XmlComment.cpp" />
-    <ClCompile Include="XmlFile.cpp" />
-    <ClCompile Include="XmlNode.cpp" />
-    <ClCompile Include="XmlObject.cpp" />
-    <ClCompile Include="XMLParser.cpp" />
-    <ClCompile Include="XmlText.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CommandListener.h" />
-    <ClInclude Include="Vector.hpp" />
-    <ClInclude Include="String.h" />
-    <ClInclude Include="XmlAttribute.h" />
-    <ClInclude Include="XmlComment.h" />
-    <ClInclude Include="XmlFile.h" />
-    <ClInclude Include="XmlNode.h" />
-    <ClInclude Include="XmlObject.h" />
-    <ClInclude Include="XmlText.h" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Commands\CommandListener.h" />
+    <ClInclude Include="Containers\Vector.hpp" />
+    <ClInclude Include="String\String.h" />
+    <ClInclude Include="Tests\doctest.h" />
+    <ClInclude Include="XML\XmlAttribute.h" />
+    <ClInclude Include="XML\XmlComment.h" />
+    <ClInclude Include="XML\XmlFile.h" />
+    <ClInclude Include="XML\XmlNode.h" />
+    <ClInclude Include="XML\XmlObject.h" />
+    <ClInclude Include="XML\XmlText.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Commands\CommandListener.cpp" />
+    <ClCompile Include="String\String.cpp" />
+    <ClCompile Include="Tests\StringTests.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Tests\testMain.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Tests\XmlFileTests.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Tests\XmlNodeTests.cpp" />
+    <ClCompile Include="XML\XmlAttribute.cpp" />
+    <ClCompile Include="XML\XmlComment.cpp" />
+    <ClCompile Include="XML\XmlFile.cpp" />
+    <ClCompile Include="XML\XmlNode.cpp" />
+    <ClCompile Include="XML\XmlObject.cpp" />
+    <ClCompile Include="XML\XMLParser.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="XML\XmlText.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

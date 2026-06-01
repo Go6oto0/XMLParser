@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "XmlObject.h"
-#include "String.h"
+#include "../String/String.h"
 /**
  * @brief Представя текстов възел в XML дървото.
  *

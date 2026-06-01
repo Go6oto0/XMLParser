@@ -1,5 +1,6 @@
 ﻿#include "CommandListener.h"
-
+#include "../String/String.h"
+#include "../XML/XmlFile.h"
 void CommandListener::run(XmlFile& file)
 {
     String command;

@@ -1,7 +1,7 @@
 ﻿#include <fstream>
 #include <iostream>
 #include "XmlFile.h"
-#include "CommandListener.h"
+#include "../Commands/CommandListener.h"
 int main()
 {
     CommandListener cmdl;

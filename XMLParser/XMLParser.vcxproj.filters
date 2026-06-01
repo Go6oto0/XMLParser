@@ -15,64 +15,79 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="XMLParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="String.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlAttribute.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlComment.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Vector.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="String.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XmlObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XmlNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XmlAttribute.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XmlComment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XmlFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XmlText.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Containers\Vector.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands\CommandListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="String\String.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\XmlAttribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\XmlComment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\XmlFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\XmlNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\XmlObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\XmlText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\doctest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Commands\CommandListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="String\String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\XmlAttribute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\XmlComment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\XmlFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\XmlNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\XmlObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\XMLParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\XmlText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\StringTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\testMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\XmlFileTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\XmlNodeTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

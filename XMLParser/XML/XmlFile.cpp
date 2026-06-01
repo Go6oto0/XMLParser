@@ -1,7 +1,4 @@
 ﻿#include "XmlFile.h"
-#include "XmlComment.h"
-#include "XmlText.h"
-#include "String.h"
 #include <fstream>
 void XmlFile::rebuildRegistry(XmlNode* curNode) {
     if (curNode == nullptr)
