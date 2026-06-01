@@ -80,7 +80,7 @@ void CommandListener::run(XmlFile& file)
         {
             String path;
             std::cin >> path;
-            //file.xpath(path);
+            file.xPath(path);
         }
         else if (command == "help")
         {

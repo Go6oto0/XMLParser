@@ -6,6 +6,7 @@ class XmlText : public XmlObject {
 public:
 	const String& getText() const;
 	XmlText(const String& text);
+	void printText(std::ostream& os = std::cout) const override;
 	void serialize(std::ostream& os, size_t indent = 0) const override;
 	XmlObject* clone() const override;
 };

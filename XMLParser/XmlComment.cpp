@@ -9,6 +9,10 @@ void XmlComment::serialize(std::ostream& os, size_t indent) const {
     os << "<!-- " << comment << " -->";
 }
 
+void XmlComment::printText(std::ostream& os) const
+{
+}
+
 XmlObject* XmlComment::clone() const
 {
     return new XmlComment(*this);

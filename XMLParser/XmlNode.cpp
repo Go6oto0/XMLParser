@@ -1,5 +1,5 @@
 #include "XmlNode.h"
-
+#include "XmlText.h"
 void XmlNode::copy(const XmlNode& other) {
 	id = other.id;
 	name = other.name;
@@ -87,6 +87,49 @@ void XmlNode::serialize(std::ostream& os, size_t indent) const {
 
 }
 XmlNode::XmlNode(const String& name) : name(name) {}
+void XmlNode::printText(std::ostream& os) const {
+	for (const XmlObject* child : children)
+	{
+		child->printText(os);
+	}
+}
+String XmlNode::getTextContent() const
+{
+	String text;
+	for (XmlObject* child : children)
+	{
+		XmlText* childText = dynamic_cast<XmlText*>(child);
+		if (childText)
+		{
+			text += childText->getText();
+		}
+		/*XmlNode* childNode = dynamic_cast<XmlNode*>(child);
+
+		if (childNode)
+		{
+			text += childNode->getTextContent();
+		}*/
+	}
+
+	return text;
+}
+Vector<XmlNode*> XmlNode::getChildrenByName(const String& name) const
+{
+	Vector<XmlNode*> result;
+	for (XmlObject* child : children)
+	{
+		XmlNode* node = dynamic_cast<XmlNode*>(child);
+		if (!node)
+		{
+			continue;
+		}
+		if (node->getName() == name)
+		{
+			result.push_back(node);
+		}
+	}
+	return result;
+}
 XmlObject* XmlNode::clone() const {
 	return new XmlNode(*this);
 }

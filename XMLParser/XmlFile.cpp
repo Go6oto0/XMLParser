@@ -120,31 +120,31 @@ void XmlFile::select(const String& id, const String& key) const
 {
     if (registry.count(id) == 0)
     {
-        std::cout << "no such element";
+        std::cout << "no such element" << "\n";
         return;
     }
     const XmlNode* node = registry.at(id);
     int ind = node->getAttributeInd(key);
     if (ind == -1)
     {
-        std::cout << "no such attribute";
+        std::cout << "no such attribute" << "\n";
         return;
     }
-    std::cout << node->getAttributes()[ind].getValue() << std::endl;
+    std::cout << node->getAttributes()[ind].getValue() << "\n";
 }
 
 void XmlFile::set(const String& id, const String& key, const String& value)
 {
     if (registry.count(id) == 0)
     {
-        std::cout << "no such element";
+        std::cout << "no such element" << "\n";
         return;
     }
     XmlNode* node = registry.at(id);
     int ind = node->getAttributeInd(key);
     if (ind == -1)
     {
-        std::cout << "no such attribute";
+        std::cout << "no such attribute" << "\n";
         return;
     }
     node->getAttributes()[ind].setValue(value);
@@ -153,7 +153,7 @@ void XmlFile::children(const String& id) const
 {
     if (registry.count(id) == 0)
     {
-        std::cout << "no such element";
+        std::cout << "no such element" << "\n";
         return;
     }
     const XmlNode* node = registry.at(id);
@@ -169,14 +169,14 @@ void XmlFile::children(const String& id) const
         int ind = child->getAttributeInd("id");
         if (ind != -1)
         {
-            std::cout << child->getAttributes()[ind].getValue() << std::endl;
+            std::cout << child->getAttributes()[ind].getValue() << "\n";
         }
     }
 }
 void XmlFile::child(const String& id, size_t pos) const {
     if (registry.count(id) == 0)
     {
-        std::cout << "no such element";
+        std::cout << "no such element" << "\n";
         return;
     }
     const XmlNode* node = registry.at(id);
@@ -195,18 +195,18 @@ void XmlFile::child(const String& id, size_t pos) const {
             int ind = child->getAttributeInd("id");
             if (ind != -1)
             {
-                std::cout << child->getAttributes()[ind].getValue() << std::endl;
+                std::cout << child->getAttributes()[ind].getValue() << "\n";
                 return;
             }
         }
         current++;
     }
-    std::cout << "no such child" << std::endl;
+    std::cout << "no such child" << "\n";
 }
 void XmlFile::text(const String& id) const {
     if (registry.count(id) == 0)
     {
-        std::cout << "no such element";
+        std::cout << "no such element" << "\n";
         return;
     }
     const XmlNode* node = registry.at(id);
@@ -219,20 +219,20 @@ void XmlFile::text(const String& id) const {
         {
             continue;
         }
-        std::cout << child->getText() << std::endl;
+        std::cout << child->getText() << "\n";
     }
 }
 void XmlFile::deleteAttr(const String& id, const String& key) {
     if (registry.count(id) == 0)
     {
-        std::cout << "no such element";
+        std::cout << "no such element" << "\n";
         return;
     }
     XmlNode* node = registry.at(id);
     int ind = node->getAttributeInd(key);
     if (ind == -1)
     {
-        std::cout << "no such attribute" << std::endl;
+        std::cout << "no such attribute" << "\n";
         return;
     }
     Vector<XmlAttribute>& attributes = node->getAttributes();
@@ -242,7 +242,7 @@ void XmlFile::deleteAttr(const String& id, const String& key) {
 void XmlFile::newChild(const String& id) {
     if (registry.count(id) == 0)
     {
-        std::cout << "no such element";
+        std::cout << "no such element" << "\n";
         return;
     }
     XmlNode* node = registry.at(id);
@@ -408,7 +408,6 @@ bool XmlFile::isWhitespaceOnly(const String& str)
     return true;
 }
 void XmlFile::buildTree(std::istream& is, XmlNode& curNode) {
-    std::cout << curNode.getName();
     while (true)
     {
         char cur;
@@ -472,7 +471,7 @@ void XmlFile::open(const String& fileName) {
     std::ifstream ifs(fileName.getPtr());
     if (!ifs.is_open())
     {
-        std::cout << "couldn't open file" << std::endl;
+        std::cout << "couldn't open file" << "\n";
         return;
     }
     free();
@@ -509,4 +508,147 @@ void XmlFile::saveAs(const String& fileName) const {
         return;
     }
     serialize(ofs);
+}
+
+String XmlFile::getNameFromQuery(const String& query, size_t start) const {
+    String result;
+    size_t len = query.getLen();
+    for (size_t i = start; i < len; i++)
+    {
+        if (query[i] == '/' || query[i] == '[' || query[i] == ']')
+        {
+            return result;
+        }
+        result.push_back(query[i]);
+    }
+    return result;
+}
+Vector<String> XmlFile::splitBySlash(const String& query) const{
+    Vector<String> miniQueries;
+    String curQuery;
+    size_t len = query.getLen();
+    for (size_t i = 0; i < len; i++)
+    {
+        if (query[i] == '/')
+        {
+            miniQueries.push_back(curQuery);
+            curQuery.clear();
+            continue;
+        }
+        curQuery.push_back(query[i]);
+    }
+    miniQueries.push_back(curQuery);
+    return miniQueries;
+}
+Vector<XmlNode*> XmlFile::filterInd(const Vector<XmlNode*>& nodes, const String& miniQuery, size_t filterStart) const {
+    Vector<XmlNode*> result;
+    size_t ind = 0;
+    for (size_t i = filterStart + 1; miniQuery[i] >= '0' && miniQuery[i] <= '9'; i++)
+    {
+        ind *= 10;
+        ind += miniQuery[i] - '0';
+    }
+    if (ind >= nodes.getSize())
+    {
+        return result;
+    }
+    result.push_back(nodes[ind]);
+    return result;
+}
+Vector<XmlNode*> XmlFile::filterAllAttr(const Vector<XmlNode*>& nodes, const String& miniQuery, size_t filterStart) const {
+    Vector<XmlNode*> result;
+    String attr;
+    for (size_t i = filterStart + 2; miniQuery[i] != ']'; i++)
+    {
+        attr.push_back(miniQuery[i]);
+    }
+    for (size_t i = 0; i < nodes.getSize(); i++)
+    {
+        int ind = nodes[i]->getAttributeInd(attr);
+        if (ind != -1)
+        {
+            std::cout << nodes[i]->getAttributes()[ind].getValue() << '\n';
+        }
+    }
+    return result;
+}
+Vector<XmlNode*> XmlFile::filterByText(const Vector<XmlNode*>& nodes, const String& miniQuery, size_t filterStart) const {
+    Vector<XmlNode*> result;
+    String name;
+    for (size_t i = filterStart + 1; miniQuery[i] != '='; i++)
+    {
+        name.push_back(miniQuery[i]);
+    }
+    String val;
+    for (size_t i = filterStart + name.getLen() + 3; miniQuery[i] != '"'; i++)
+    {
+        val.push_back(miniQuery[i]);
+    }
+    for (size_t i = 0; i < nodes.getSize(); i++)
+    {
+        Vector<XmlNode*> children = nodes[i]->getChildrenByName(name);
+        for (size_t k = 0; k < children.getSize(); k++)
+        {
+            if (children[k]->getTextContent() == val)
+            {
+                result.push_back(nodes[i]);
+            }
+        }
+    }
+    return result;
+}
+Vector<XmlNode*> XmlFile::applyFilter(const Vector<XmlNode*>& nodes, const String& miniQuery, size_t filterStart) const {
+    if (miniQuery[filterStart + 1] >= '0' && miniQuery[filterStart + 1] <= '9')
+    {
+        return filterInd(nodes, miniQuery, filterStart);
+    }
+    if (miniQuery[filterStart + 1] == '@')
+    {
+        return filterAllAttr(nodes, miniQuery, filterStart);
+    }
+    if (miniQuery[filterStart + 1] >= 'a' && miniQuery[filterStart + 1] <= 'z')
+    {
+        return filterByText(nodes, miniQuery, filterStart);
+    }
+    std::cout << "No such filter" << '\n';
+    Vector<XmlNode*> result;
+    return result;
+}
+Vector<XmlNode*> XmlFile::applyQuery(const Vector<XmlNode*>& curResult, const String& miniQuery) const {
+    String name = getNameFromQuery(miniQuery);
+    std::cout << name << " ";
+    Vector<XmlNode*> newResult;
+    for (size_t i = 0; i < curResult.getSize(); i++)
+    {
+        Vector<XmlNode*> children = curResult[i]->getChildrenByName(name);
+        std::cout << children.getSize();
+        for (size_t j = 0; j < children.getSize(); j++)
+        {
+            newResult.push_back(children[j]);
+        }
+    }
+    if (miniQuery.getLen() == name.getLen())
+    {
+        return newResult;
+    }
+    size_t filterStart = name.getLen();
+    if (miniQuery[filterStart] != '[')
+    {
+        return newResult;
+    }
+    return applyFilter(newResult, miniQuery, filterStart);
+}
+void XmlFile::xPath(const String& query) const {
+    const Vector<String> miniQueries = splitBySlash(query);
+    Vector<XmlNode*> base;
+    base.push_back(root);
+    for (size_t i = 0; i < miniQueries.getSize(); i++)
+    {
+        std::cout << miniQueries[i] << " ";
+        base = applyQuery(base, miniQueries[i]);
+    }
+    for (size_t i = 0; i < base.getSize(); i++)
+    {
+        base[i]->printText();
+    }
 }

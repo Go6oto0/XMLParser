@@ -22,6 +22,9 @@ public:
 	void addChild(XmlObject* child);
 	const Vector<XmlAttribute>& getAttributes() const;
 	Vector<XmlAttribute>& getAttributes();
+	void printText(std::ostream& os = std::cout) const override;
+	String getTextContent() const;
+	Vector<XmlNode*> getChildrenByName(const String& name) const;
 	int getAttributeInd(const String& attr) const;
 	XmlNode(const String&);
 	const String& getName() const;

@@ -1,0 +1,28 @@
+<root>
+	<people id="auto_0">
+		<!-- employee database -->
+		<person id="0">
+			<name id="auto_1">
+				John Smith
+			</name>
+			<address type="home" id="auto_2">
+				Brooklyn, NY
+			</address>
+			<!-- on vacation -->
+			<address type="work" id="auto_3">
+				Manhattan, NYC
+			</address>
+			<occupation id="auto_4">
+				dentist
+			</occupation>
+		</person>
+		<person id="0_1">
+			<name id="auto_5">
+				Ivan Petrov
+			</name>
+			<address id="auto_6">
+				Bulgaria
+			</address>
+		</person>
+	</people>
+</root>
