@@ -8,6 +8,16 @@ void XmlNode::copy(const XmlNode& other) {
 		children.push_back(xmlObj->clone());
 	}
 }
+void XmlNode::moveFrom(XmlNode&& other) {
+	id = other.id;
+	name = other.name;
+	attributes = other.attributes;
+	children = other.children;
+	other.id.clear();
+	other.name.clear();
+	other.attributes.clear();
+	other.children.clear();
+}
 
 void XmlNode::free() {
 	for (XmlObject* child : children)
@@ -22,7 +32,17 @@ XmlNode::XmlNode() = default;
 XmlNode::XmlNode(const XmlNode& other) {
 	copy(other);
 }
-
+XmlNode::XmlNode(XmlNode&& other) {
+	moveFrom(std::move(other));
+}
+XmlNode& XmlNode::operator=(XmlNode&& other) {
+	if (this != &other)
+	{
+		free();
+		moveFrom(std::move(other));
+	}
+	return *this;
+}
 XmlNode& XmlNode::operator=(const XmlNode& other) {
 	if (this != &other)
 	{
@@ -70,21 +90,37 @@ const Vector<XmlObject*>& XmlNode::getChildren() const
 	return children;
 }
 
-void XmlNode::serialize(std::ostream& os, size_t indent) const {
-	printIndents(os, indent);
-	os << "<" << name;
-	for (const XmlAttribute& attr : attributes) {
-		os << " " << attr.getName() << "=\"" << attr.getValue() << "\"";
-	}
-	os << ">";
-	os << '\n';
-	for (const XmlObject* child : children) {
-		child->serialize(os, indent + 1);
-		os << '\n';
-	}
-	printIndents(os, indent);
-	os << "</" << name << ">";
+void XmlNode::serialize(std::ostream& os, size_t indent) const
+{
+    printIndents(os, indent);
 
+    os << "<" << name;
+
+    for (const XmlAttribute& attr : attributes)
+    {
+        os << ' ' << attr.getName()
+           << "=\"" << attr.getValue() << "\"";
+    }
+
+    if (children.getSize() == 1 &&
+        dynamic_cast<const XmlText*>(children[0]))
+    {
+        os << '>';
+        children[0]->serialize(os, 0);
+        os << "</" << name << '>';
+        return;
+    }
+
+    os << ">\n";
+
+    for (const XmlObject* child : children)
+    {
+        child->serialize(os, indent + 1);
+        os << '\n';
+    }
+
+    printIndents(os, indent);
+    os << "</" << name << ">";
 }
 XmlNode::XmlNode(const String& name) : name(name) {}
 void XmlNode::printText(std::ostream& os) const {

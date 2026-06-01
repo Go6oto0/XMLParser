@@ -12,9 +12,12 @@ private:
 private:
 	void copy(const XmlNode& other);
 	void free();
+	void moveFrom(XmlNode&& other);
 public:
 	XmlNode();
 	XmlNode(const XmlNode& other);
+	XmlNode(XmlNode&& other);
+	XmlNode& operator=(XmlNode&& other);
 	XmlNode& operator=(const XmlNode& other);
 	~XmlNode();
 	const String& getId() const;

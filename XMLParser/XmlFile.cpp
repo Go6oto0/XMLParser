@@ -24,7 +24,7 @@ void XmlFile::rebuildRegistry(XmlNode* curNode) {
 void XmlFile::copy(const XmlFile& other) {
     root = static_cast<XmlNode*>(other.root->clone());
     nextId = other.nextId;
-    rebuildRegistry(other.root);
+    rebuildRegistry(root);
     currentFileName = other.currentFileName;
 }
 
@@ -463,9 +463,9 @@ XmlNode* XmlFile::getById(String id)
     return registry[id];
 }
 
-const XmlNode* XmlFile::getById(String id) const {
+/*const XmlNode* XmlFile::getById(String id) const {
     return registry.at(id);
-}
+}*/
 
 void XmlFile::open(const String& fileName) {
     std::ifstream ifs(fileName.getPtr());
@@ -616,12 +616,11 @@ Vector<XmlNode*> XmlFile::applyFilter(const Vector<XmlNode*>& nodes, const Strin
 }
 Vector<XmlNode*> XmlFile::applyQuery(const Vector<XmlNode*>& curResult, const String& miniQuery) const {
     String name = getNameFromQuery(miniQuery);
-    std::cout << name << " ";
     Vector<XmlNode*> newResult;
     for (size_t i = 0; i < curResult.getSize(); i++)
     {
         Vector<XmlNode*> children = curResult[i]->getChildrenByName(name);
-        std::cout << children.getSize();
+
         for (size_t j = 0; j < children.getSize(); j++)
         {
             newResult.push_back(children[j]);
@@ -644,7 +643,6 @@ void XmlFile::xPath(const String& query) const {
     base.push_back(root);
     for (size_t i = 0; i < miniQueries.getSize(); i++)
     {
-        std::cout << miniQueries[i] << " ";
         base = applyQuery(base, miniQueries[i]);
     }
     for (size_t i = 0; i < base.getSize(); i++)

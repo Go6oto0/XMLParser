@@ -11,7 +11,7 @@ void XmlText::serialize(std::ostream& os, size_t indent) const {
 XmlText::XmlText(const String& text) : text(text) {}
 
 void XmlText::printText(std::ostream& os) const {
-    os << text << std::endl;
+    os << text;
 }
 
 XmlObject* XmlText::clone() const

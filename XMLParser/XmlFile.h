@@ -49,7 +49,7 @@ public:
 	bool isWhitespaceOnly(const String& str);
 	void buildTree(std::istream& is, XmlNode& curNode);
 	void handleId(XmlNode& child);
-	const XmlNode* getById(String id) const;
+	const XmlNode* getById(const String& id) const;
 	Vector<XmlNode*> applyQuery(const Vector<XmlNode*>& curResult, const String& miniQuery) const;
 	Vector<String> splitBySlash(const String& query) const;
 	Vector<XmlNode*> filterInd(const Vector<XmlNode*>& nodes, const String& miniQuery, size_t filterStart) const;

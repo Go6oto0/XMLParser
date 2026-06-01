@@ -91,6 +91,14 @@ private:
 			arr[i] = other.arr[i];
 		}
 	}
+	void moveFrom(Vector&& other) {
+		size = other.size;
+		capacity = other.capacity;
+		arr = other.arr;
+		other.arr = nullptr;
+		other.capacity = 0;
+		other.size = 0;
+	}
 	void resize() {
 		if (capacity > 0)
 		{
@@ -116,6 +124,9 @@ private:
 	}
 public:
 	Vector() : arr(nullptr), size(0), capacity(0) {}
+	Vector(Vector&& other) {
+		moveFrom(std::move(other));
+	}
 	Vector(const Vector& other) {
 		copy(other);
 	}
@@ -124,6 +135,14 @@ public:
 		{
 			free();
 			copy(other);
+		}
+		return *this;
+	}
+	Vector& operator=(Vector&& other) {
+		if (&other != this)
+		{
+			free();
+			moveFrom(std::move(other));
 		}
 		return *this;
 	}
