@@ -1,4 +1,4 @@
-#include "XmlFile.h"
+﻿#include "XmlFile.h"
 #include "XmlComment.h"
 #include "XmlText.h"
 #include "String.h"
@@ -76,14 +76,14 @@ XmlFile& XmlFile::operator=(const XmlFile& other)
     return *this;
 }
 
-XmlFile&& XmlFile::operator=(XmlFile&& other)
+XmlFile& XmlFile::operator=(XmlFile&& other)
 {
     if (this != &other)
     {
         free();
         moveFrom(std::move(other));
     }
-    return std::move(*this);
+    return *this;
 }
 
 XmlFile::~XmlFile()
@@ -115,7 +115,6 @@ String XmlFile::toString(size_t num)
 
     return result;
 }
-
 void XmlFile::select(const String& id, const String& key) const
 {
     if (registry.count(id) == 0)
@@ -132,7 +131,6 @@ void XmlFile::select(const String& id, const String& key) const
     }
     std::cout << node->getAttributes()[ind].getValue() << "\n";
 }
-
 void XmlFile::set(const String& id, const String& key, const String& value)
 {
     if (registry.count(id) == 0)
@@ -382,7 +380,6 @@ XmlNode* XmlFile::createNode(std::istream& is) {
         }
     }
 }
-
 XmlText* XmlFile::createText(std::istream& is, char first) {
     String text;
     text.push_back(first);
@@ -449,23 +446,21 @@ void XmlFile::deserialize(std::istream& is)
     root = new XmlNode("root");
     buildTree(is, *root);
 }
-
 void XmlFile::serialize(std::ostream& os) const
 {
     if (root)
     {
-        root->serialize(os);
+        for (size_t i = 0; i < root->getChildren().getSize(); i++)
+        {
+
+            root->getChildren()[i]->serialize(os);
+        }
     }
 }
-
 XmlNode* XmlFile::getById(String id)
 {
     return registry[id];
 }
-
-/*const XmlNode* XmlFile::getById(String id) const {
-    return registry.at(id);
-}*/
 
 void XmlFile::open(const String& fileName) {
     std::ifstream ifs(fileName.getPtr());
@@ -509,7 +504,6 @@ void XmlFile::saveAs(const String& fileName) const {
     }
     serialize(ofs);
 }
-
 String XmlFile::getNameFromQuery(const String& query, size_t start) const {
     String result;
     size_t len = query.getLen();

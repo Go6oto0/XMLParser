@@ -1,4 +1,4 @@
-#include "XmlText.h"
+﻿#include "XmlText.h"
 
 const String& XmlText::getText() const {
     return text;

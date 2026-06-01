@@ -1,4 +1,4 @@
-#include "XmlAttribute.h"
+﻿#include "XmlAttribute.h"
 
 XmlAttribute::XmlAttribute() = default;
 XmlAttribute::XmlAttribute(const String& name, const String& value) : name(name), value(value)

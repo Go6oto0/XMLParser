@@ -1,4 +1,4 @@
-<root>
+
 	<people id="auto_0">
 		<!-- employee database -->
 		<person id="0">
@@ -15,4 +15,3 @@
 		<newChild id="auto_7">
 		</newChild>
 	</people>
-</root>

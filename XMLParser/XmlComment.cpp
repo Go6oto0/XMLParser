@@ -1,4 +1,4 @@
-#include "XmlComment.h"
+﻿#include "XmlComment.h"
 
 const String& XmlComment::getComment() const {
     return comment;

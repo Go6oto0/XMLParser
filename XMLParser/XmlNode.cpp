@@ -1,4 +1,4 @@
-#include "XmlNode.h"
+﻿#include "XmlNode.h"
 #include "XmlText.h"
 void XmlNode::copy(const XmlNode& other) {
 	id = other.id;
@@ -51,6 +51,12 @@ XmlNode& XmlNode::operator=(const XmlNode& other) {
 	}
 	return *this;
 }
+/**
+ * @brief Finds the index of an attribute by name.
+ *
+ * @param attr Name of the attribute to search for.
+ * @return Index of the attribute if found, otherwise -1.
+ */
 int XmlNode::getAttributeInd(const String& attr) const {
 	for (size_t i = 0; i < attributes.getSize(); i++)
 	{
@@ -65,31 +71,60 @@ XmlNode::~XmlNode()
 {
 	free();
 }
-
+/**
+ * @brief Adds an attribute to the XML node.
+ *
+ * @param attribute Attribute to add.
+ */
 void XmlNode::addAttribute(const XmlAttribute& attribute) {
 	attributes.push_back(attribute);
 }
-
+/**
+ * @brief Adds a child XML object to the node.
+ *
+ * The node takes ownership of the provided pointer.
+ *
+ * @param child Child object to add.
+ */
 void XmlNode::addChild(XmlObject* child) {
 
 	children.push_back(child);
 }
-
+/**
+ * @brief Returns the node attributes.
+ *
+ * @return Constant reference to the collection of attributes.
+ */
 const Vector<XmlAttribute>& XmlNode::getAttributes() const
 {
 	return attributes;
 }
-
+/**
+ * @brief Returns the node attributes.
+ *
+ * @return Reference to the collection of attributes.
+ */
 Vector<XmlAttribute>& XmlNode::getAttributes()
 {
 	return attributes;
 }
-
+/**
+ * @brief Returns the child XML objects of the node.
+ *
+ * @return Constant reference to the collection of child objects.
+ */
 const Vector<XmlObject*>& XmlNode::getChildren() const
 {
 	return children;
 }
-
+/**
+ * @brief Writes the XML node and its children to an output stream.
+ *
+ * The node is written with indentation according to its depth in the tree.
+ *
+ * @param os Output stream to write to.
+ * @param indent Indentation level of the node.
+ */
 void XmlNode::serialize(std::ostream& os, size_t indent) const
 {
     printIndents(os, indent);
@@ -122,13 +157,28 @@ void XmlNode::serialize(std::ostream& os, size_t indent) const
     printIndents(os, indent);
     os << "</" << name << ">";
 }
+/**
+ * @brief Creates an XML node with a given name.
+ *
+ * @param name Name of the XML element.
+ */
 XmlNode::XmlNode(const String& name) : name(name) {}
+/**
+ * @brief Prints the text content of all child objects.
+ *
+ * @param os Output stream to print to.
+ */
 void XmlNode::printText(std::ostream& os) const {
 	for (const XmlObject* child : children)
 	{
 		child->printText(os);
 	}
 }
+/**
+ * @brief Collects the direct text content of the XML node.
+ *
+ * @return String containing the text from direct text children.
+ */
 String XmlNode::getTextContent() const
 {
 	String text;
@@ -149,6 +199,12 @@ String XmlNode::getTextContent() const
 
 	return text;
 }
+/**
+ * @brief Finds all child elements with a given name.
+ *
+ * @param name Name of the child elements to search for.
+ * @return Collection of matching child nodes.
+ */
 Vector<XmlNode*> XmlNode::getChildrenByName(const String& name) const
 {
 	Vector<XmlNode*> result;
