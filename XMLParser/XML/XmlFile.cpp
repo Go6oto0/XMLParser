@@ -639,5 +639,6 @@ void XmlFile::xPath(const String& query) const {
     for (size_t i = 0; i < base.getSize(); i++)
     {
         base[i]->printText();
+        std::cout << "\n";
     }
 }

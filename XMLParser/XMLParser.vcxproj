@@ -145,22 +145,24 @@
     <ClCompile Include="Commands\CommandListener.cpp" />
     <ClCompile Include="String\String.cpp" />
     <ClCompile Include="Tests\StringTests.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Tests\testMain.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Tests\XmlFileTests.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Tests\XmlNodeTests.cpp" />
+    <ClCompile Include="Tests\XmlNodeTests.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="XML\XmlAttribute.cpp" />
     <ClCompile Include="XML\XmlComment.cpp" />
     <ClCompile Include="XML\XmlFile.cpp" />
     <ClCompile Include="XML\XmlNode.cpp" />
     <ClCompile Include="XML\XmlObject.cpp" />
     <ClCompile Include="XML\XMLParser.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="XML\XmlText.cpp" />
   </ItemGroup>

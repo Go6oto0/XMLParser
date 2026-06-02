@@ -172,6 +172,7 @@ void XmlNode::printText(std::ostream& os) const {
 	for (const XmlObject* child : children)
 	{
 		child->printText(os);
+		std::cout << " ";
 	}
 }
 /**
